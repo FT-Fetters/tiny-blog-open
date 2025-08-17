@@ -26,8 +26,8 @@
 
 ```bash
 # 克隆项目
-git clone <repository-url>
-cd tiny-blog
+git clone https://github.com/FT-Fetters/tiny-blog-open
+cd tiny-blog-open
 
 # 安装依赖
 pnpm install
