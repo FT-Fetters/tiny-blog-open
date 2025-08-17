@@ -1,0 +1,569 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Monaco, 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Ubuntu Mono', monospace;
+  }
+  
+  body {
+    @apply bg-neutral-50 text-neutral-900;
+    font-family: var(--font-mono);
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium text-neutral-900;
+    letter-spacing: -0.01em;
+    font-family: var(--font-mono);
+  }
+  
+  p {
+    @apply text-neutral-700 leading-relaxed;
+    font-family: var(--font-mono);
+  }
+  
+  a {
+    @apply text-neutral-900 transition-all duration-200;
+    text-decoration: none;
+    background-image: linear-gradient(to right, currentColor, currentColor);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    font-family: var(--font-mono);
+  }
+  
+  a:hover {
+    @apply text-neutral-600;
+    background-size: 100% 1px;
+  }
+  
+  code {
+    @apply bg-neutral-100 text-neutral-800 px-1.5 py-0.5 rounded text-sm;
+    font-family: var(--font-mono);
+  }
+  
+  pre {
+    @apply bg-neutral-100 border border-neutral-200 rounded-md p-4 overflow-x-auto my-6;
+    font-family: var(--font-mono);
+  }
+  
+  pre code {
+    @apply bg-transparent p-0;
+  }
+}
+
+@layer components {
+  /* 布局组件 */
+  .content-wrapper {
+    @apply max-w-4xl mx-auto px-6 sm:px-8 lg:px-12;
+  }
+
+  /* 按钮样式 */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+    letter-spacing: -0.01em;
+    background-image: none !important;  /* 覆盖全局链接下划线 */
+  }
+
+  .btn:hover {
+    background-size: 0% 1px !important;  /* 确保按钮不显示下划线 */
+  }
+
+  .btn-primary {
+    @apply bg-neutral-900 text-neutral-50 hover:bg-neutral-800 h-11 px-6 py-2;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-primary:hover {
+    @apply text-neutral-50;  /* 确保按钮hover时文字颜色不变 */
+  }
+
+  .btn-secondary {
+    @apply bg-transparent text-neutral-900 hover:bg-neutral-100 border border-neutral-300 hover:border-neutral-400 h-11 px-6 py-2;
+  }
+
+  .btn-secondary:hover {
+    @apply text-neutral-900;  /* 确保按钮hover时文字颜色不变 */
+  }
+
+  .btn-ghost {
+    @apply text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 h-11 px-4 py-2;
+  }
+
+  /* 卡片样式 */
+  .card {
+    @apply bg-white border border-neutral-200 rounded-lg;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  /* 深色模式 */
+  .dark body {
+    @apply bg-neutral-900 text-neutral-100;
+  }
+  
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    @apply text-neutral-100;
+  }
+  
+  .dark p {
+    @apply text-neutral-400;
+  }
+  
+  .dark a {
+    @apply text-neutral-100;
+    background-image: linear-gradient(to right, currentColor, currentColor);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: bottom left;
+  }
+  
+  .dark a:hover {
+    @apply text-neutral-300;
+    background-size: 100% 1px;
+  }
+  
+  .dark code {
+    @apply bg-neutral-800 text-neutral-200;
+  }
+  
+  .dark pre {
+    @apply bg-neutral-800 border-neutral-700;
+  }
+  
+  .dark .btn-primary {
+    @apply bg-neutral-100 text-neutral-900 hover:bg-neutral-200;
+  }
+  
+  .dark .btn-primary:hover {
+    @apply text-neutral-900;  /* 确保深色模式下按钮hover时文字颜色不变 */
+  }
+  
+  .dark .btn-secondary {
+    @apply bg-transparent text-neutral-100 border-neutral-700 hover:border-neutral-600 hover:bg-neutral-800;
+  }
+  
+  .dark .btn-secondary:hover {
+    @apply text-neutral-100;  /* 确保深色模式下按钮hover时文字颜色不变 */
+  }
+  
+  .dark .btn-ghost {
+    @apply text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800;
+  }
+  
+  .dark .card {
+    @apply bg-neutral-900 border-neutral-800;
+  }
+}
+
+/* 自定义工具类 */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* ANSI Art 文本效果 */
+  .ansi-art {
+    font-family: var(--font-mono);
+    white-space: pre-line;
+    line-height: 1.2;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: currentColor;
+  }
+
+  /* 立体浮雕ANSI Art效果 */
+  .ansi-art-relief {
+    font-family: var(--font-mono);
+    text-align: center;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+  }
+
+  .ansi-art-relief pre {
+    color: #2d3748;
+    text-shadow: 
+      1px 1px 0px #4a5568,
+      2px 2px 0px #718096,
+      3px 3px 0px #a0aec0;
+    font-weight: 800;
+    transform: perspective(500px) rotateX(15deg);
+    transform-style: preserve-3d;
+  }
+
+  /* 深色模式的立体浮雕效果 */
+  .dark .ansi-art-relief pre {
+    color: #f7fafc;
+    text-shadow: 
+      1px 1px 0px #e2e8f0,
+      2px 2px 0px #cbd5e0,
+      3px 3px 0px #a0aec0;
+  }
+
+  .ansi-title {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    position: relative;
+  }
+
+  /* ASCII 装饰边框 */
+  .ascii-border {
+    font-family: var(--font-mono);
+    color: currentColor;
+    opacity: 0.6;
+    font-size: 0.8em;
+    line-height: 1;
+    margin: 1rem 0;
+  }
+}
+
+/* Prose 样式用于 Markdown 内容 */
+.prose {
+  @apply max-w-none text-neutral-700;
+  font-family: var(--font-mono);
+}
+
+.prose h1 {
+  @apply text-3xl font-medium mb-8 mt-10 text-neutral-900;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  font-family: var(--font-mono);
+}
+
+.prose h2 {
+  @apply text-2xl font-medium mb-6 mt-8 text-neutral-900;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  font-family: var(--font-mono);
+}
+
+.prose h3 {
+  @apply text-xl font-medium mb-4 mt-6 text-neutral-900;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  font-family: var(--font-mono);
+}
+
+.prose p {
+  @apply mb-6 leading-relaxed;
+  line-height: 1.65;
+  font-family: var(--font-mono);
+}
+
+.prose ul, .prose ol {
+  @apply mb-6 pl-6;
+  font-family: var(--font-mono);
+}
+
+.prose li {
+  @apply mb-2 leading-relaxed;
+  font-family: var(--font-mono);
+}
+
+.prose blockquote {
+  @apply border-l-4 border-neutral-300 pl-6 italic text-neutral-600 my-6;
+  font-style: italic;
+  font-family: var(--font-mono);
+}
+
+.prose img {
+  @apply rounded-lg my-8;
+}
+
+.prose hr {
+  @apply border-neutral-300 my-10;
+}
+
+.prose strong {
+  @apply text-neutral-900 font-semibold;
+}
+
+.prose em {
+  @apply text-neutral-800;
+}
+
+/* 深色模式的 Prose */
+.dark .prose {
+  @apply text-neutral-400;
+  font-family: var(--font-mono);
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3 {
+  @apply text-neutral-100;
+  font-family: var(--font-mono);
+}
+
+.dark .prose blockquote {
+  @apply border-neutral-600 text-neutral-500;
+  font-family: var(--font-mono);
+}
+
+.dark .prose hr {
+  @apply border-neutral-700;
+}
+
+.dark .prose strong {
+  @apply text-neutral-100 font-semibold;
+}
+
+.dark .prose em {
+  @apply text-neutral-300;
+}
+
+/* ==============================================
+   LOADING ANIMATIONS & TRANSITIONS
+   ============================================== */
+
+/* Shimmer Loading Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(245, 245, 245, 0.6) 25%,
+    rgba(232, 232, 232, 0.8) 50%,
+    rgba(245, 245, 245, 0.6) 75%
+  );
+  background-size: 200px 100%;
+  animation: shimmer 2.5s infinite ease-in-out;
+}
+
+.dark .shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(64, 64, 64, 0.4) 25%,
+    rgba(82, 82, 82, 0.6) 50%,
+    rgba(64, 64, 64, 0.4) 75%
+  );
+  background-size: 200px 100%;
+}
+
+/* Skeleton Pulse Animation */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.skeleton {
+  @apply bg-gray-200 dark:bg-gray-700 rounded;
+  animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Content Fade In Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fade-in-delayed {
+  animation: fadeIn 0.6s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+/* Staggered Animation */
+.stagger-children > * {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
+
+/* Loading Dots Animation */
+@keyframes loadingDots {
+  0%, 20% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  80%, 100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.loading-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.loading-dots::before,
+.loading-dots::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+  animation: loadingDots 1.4s infinite ease-in-out;
+}
+
+.loading-dots::before {
+  animation-delay: 0s;
+}
+
+.loading-dots::after {
+  animation-delay: 0.2s;
+}
+
+.loading-dots {
+  position: relative;
+}
+
+.loading-dots::after {
+  position: absolute;
+  left: 10px;
+}
+
+/* Card Loading State */
+.card-loading {
+  @apply relative overflow-hidden;
+}
+
+.card-loading::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 2.5s infinite;
+  z-index: 1;
+}
+
+.dark .card-loading::before {
+  background: linear-gradient(
+    90deg,
+    rgba(64, 64, 64, 0) 0%,
+    rgba(82, 82, 82, 0.4) 50%,
+    rgba(64, 64, 64, 0) 100%
+  );
+}
+
+/* Cross-fade Transition for Loading to Content */
+@keyframes crossFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes crossFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.cross-fade-out {
+  animation: crossFadeOut 0.4s ease-out forwards;
+}
+
+.cross-fade-in {
+  animation: crossFadeIn 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+/* Loading to Content Container */
+.loading-container {
+  position: relative;
+  min-height: inherit;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background: inherit;
+}
+
+.content-layer {
+  position: relative;
+  z-index: 2;
+}
+
+/* Smooth Transition Utilities */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-bounce {
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
