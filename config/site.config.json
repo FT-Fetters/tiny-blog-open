@@ -1,0 +1,27 @@
+{
+  "title": "Tiny Blog",
+  "description": "😜Yes, I broke it. No, I didn't mean to. Yes, I learned something.",
+  "introduction": "\"Do not go gentle into that good night. Old age should burn and rave at close of day. Rage, rage against the dying of the light.\"",
+  "author": {
+    "name": "Unknown",
+    "email": "blog@example.com",
+    "github": "github-username"
+  },
+  "url": "https://your-blog.com",
+  "social": {
+    "github": "https://github.com/Tiny-Blog",
+    "twitter": "https://twitter.com/username",
+    "email": "mailto:someone@gmail.com"
+  },
+  "theme": {
+    "primaryColor": "#3b82f6"
+  },
+  "nav": [
+    { "name": "Home", "href": "/" },
+    { "name": "Posts", "href": "/posts" },
+    { "name": "Tags", "href": "/tags" },
+    { "name": "About", "href": "/about" }
+  ],
+  "postsPerPage": 6,
+  "excerptLength": 200
+}
