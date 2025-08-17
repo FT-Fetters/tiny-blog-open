@@ -44,7 +44,8 @@ pnpm dev
 
 ```bash
 # 使用部署脚本
-./scripts/deploy.sh
+bash <(curl -sSL https://raw.githubusercontent.com/FT-Fetters/tiny-blog-o
+pen/master/scripts/deploy.sh)
 ```
 
 脚本将引导你完成以下配置：
