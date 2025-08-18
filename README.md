@@ -4,6 +4,11 @@
 
 在线示例：[demo](https://blog.heybcat.com)
 
+<img width="3016" height="1310" alt="image" src="https://github.com/user-attachments/assets/c252549c-ff24-4834-a0df-4e1dfe33f9c7" />
+<img width="1380" height="560" alt="Google Chrome 2025-08-18 10 05 29" src="https://github.com/user-attachments/assets/00c448a7-026b-4e2e-a078-613e3323ff6f" />
+
+
+
 ## ✨ 特性
 
 - 🎨 **极简设计**：黑白灰配色，极客风格的界面设计
