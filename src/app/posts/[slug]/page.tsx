@@ -10,6 +10,7 @@ import { formatDate } from '@/lib/utils';
 import { TagList } from '@/components/TagList';
 import { useParams } from 'next/navigation';
 import { LoadingTransition } from '@/components/LoadingComponents';
+import { CodeBlock } from '@/components/CodeBlock';
 
 export default function PostPage() {
   const params = useParams();
@@ -138,10 +139,9 @@ export default function PostPage() {
       {/* 文章内容 */}
       <div className="fade-in-delayed" style={{ animationDelay: '0.2s' }}>
         {htmlContent && (
-          <div 
-            className="prose"
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
-          />
+          <div className="prose">
+            <CodeBlock html={htmlContent} />
+          </div>
         )}
       </div>
 
