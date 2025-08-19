@@ -3,6 +3,9 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import remarkHtml from 'remark-html';
+import { rehype } from 'rehype';
+import rehypePrismPlus from 'rehype-prism-plus';
+import rehypeStringify from 'rehype-stringify';
 import { Post, PostMeta, PostFrontmatter } from '@/types';
 import { calculateReadingTime, generateExcerpt } from './utils';
 
@@ -120,9 +123,21 @@ export function getPaginatedPosts(page: number = 1, limit: number = 6) {
 }
 
 export async function markdownToHtml(markdown: string): Promise<string> {
-  const result = await remark()
+  // 首先将 markdown 转换为 HTML
+  const remarkResult = await remark()
     .use(remarkHtml, { sanitize: false })
     .process(markdown);
     
-  return result.toString();
+  // 然后使用 rehype 处理 HTML，添加代码高亮
+  const rehypeResult = await rehype()
+    .use(rehypePrismPlus, {
+      showLineNumbers: true,
+      ignoreMissing: true,
+      // 确保行号功能正确启用
+      lineNumbersStyle: true
+    })
+    .use(rehypeStringify)
+    .process(remarkResult.toString());
+    
+  return rehypeResult.toString();
 }
