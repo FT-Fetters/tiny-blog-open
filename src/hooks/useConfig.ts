@@ -63,7 +63,9 @@ export function useConfig() {
   }, []);
 
   return {
-    ...state,
+    data: state.config,
+    loading: state.loading,
+    error: state.error,
     refetch: fetchConfig,
     reload: reloadConfig
   };
