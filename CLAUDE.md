@@ -193,3 +193,77 @@ TWITTER_URL=https://twitter.com/username
 - 无需手动重新验证，文件保存后刷新即可看到更新
 - Docker挂载内容支持实时同步
 - 配置文件支持热重载（通过/api/config/reload）
+
+## 高级开发指南
+
+### TypeScript类型系统架构
+- **核心类型定义**: `src/types/post.ts` 定义了Post、PostMeta和PostFrontmatter接口
+- **Post vs PostMeta**: Post包含完整内容，PostMeta只包含元数据（用于列表页面性能优化）
+- **类型导出模式**: 所有类型通过`src/types/index.ts`统一导出
+- **严格模式**: 启用TypeScript严格模式，确保类型安全
+
+### React Hooks架构模式
+项目使用了统一的hooks模式管理API状态：
+- **usePosts**: 文章列表管理，支持分页、搜索、标签过滤
+- **usePost**: 单篇文章获取，包含加载状态管理
+- **useConfig**: 站点配置管理，支持动态重载
+- **通用模式**: 所有hooks都实现`{data, loading, error, refetch}`模式
+
+### 组件加载系统架构
+- **LoadingTransition**: 核心过渡组件，实现cross-fade效果
+- **骨架屏组件**: Skeleton、SkeletonText、SkeletonCard提供加载占位
+- **分层动画**: fade-in、fade-in-up、stagger-children实现渐进式加载
+- **状态管理**: 通过useState和useEffect精确控制加载过渡时序
+
+### Markdown处理管道
+```javascript
+// 处理流程：Markdown → remark → remarkHtml → rehype → rehypePrismPlus
+// 位置：src/lib/posts.ts 的 markdownToHtml 函数
+// 特性：支持代码高亮、行号显示、HTML输出
+```
+
+### 关键工具函数 (`src/lib/utils.ts`)
+- `calculateReadingTime()`: 基于字符数计算阅读时间
+- `generateExcerpt()`: 自动生成文章摘要
+- 这些函数在文章处理管道中被广泛使用
+
+### 调试和故障排查
+
+#### 常见开发问题
+1. **文章不显示**: 检查frontmatter中的`published`字段和日期格式
+2. **代码高亮问题**: 确认Prism.js语言包是否正确加载
+3. **图片加载失败**: 检查Docker环境下的图片路径映射
+4. **类型错误**: 优先检查`src/types/`中的类型定义
+
+#### API调试技巧
+```bash
+# 测试API端点
+curl -X GET "http://localhost:3000/api/posts"
+curl -X GET "http://localhost:3000/api/posts/sample-post"
+curl -X GET "http://localhost:3000/api/config"
+
+# Docker环境测试
+curl -X GET "http://localhost:3131/api/posts"
+```
+
+#### 构建问题诊断
+```bash
+# 完整的开发检查流程
+pnpm install      # 确保依赖完整
+pnpm type-check   # 类型检查（必须先通过）
+pnpm lint         # 代码规范检查
+pnpm build        # 构建检查
+```
+
+### 代码贡献规范
+- **组件命名**: 使用PascalCase，如`PostCard.tsx`
+- **Hook命名**: 使用camelCase，以use开头，如`usePosts.ts`
+- **文件组织**: 组件放在`components/`，hooks放在`hooks/`，工具函数放在`lib/`
+- **导入顺序**: React导入 → 第三方库 → 本地导入（相对路径）
+- **CSS类名**: 使用Tailwind原子类，避免自定义CSS除非必要
+
+### 性能监控点
+- **内存泄漏**: 注意useEffect清理函数，特别是定时器和事件监听器
+- **重复渲染**: 使用React DevTools检查不必要的重渲染
+- **API调用频率**: hooks中使用依赖数组避免不必要的API请求
+- **包体积**: 定期检查bundle大小，避免导入整个工具库

@@ -5,7 +5,7 @@ import { useConfig } from '@/hooks/useConfig';
 import { LoadingTransition } from '@/components/LoadingComponents';
 
 export default function HomePage() {
-  const { config, loading, error } = useConfig();
+  const { data: config, loading, error } = useConfig();
 
   if (error) {
     return (

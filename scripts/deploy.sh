@@ -11,6 +11,27 @@ echo "   TinyBlog 一键部署脚本"
 echo "======================================"
 echo ""
 
+# 生成随机八位字符串的函数
+generate_random_string() {
+    # 使用多种方法生成随机字符串，确保跨平台兼容性
+    if command -v openssl &> /dev/null; then
+        # 使用 openssl 生成随机字符，然后转换为字母数字
+        openssl rand -base64 12 | tr -d '/+' | cut -c1-8 2>/dev/null
+    elif [[ -e /dev/urandom ]]; then
+        # 使用 /dev/urandom
+        tr -dc 'A-Za-z0-9' </dev/urandom | head -c8 2>/dev/null
+    else
+        # 回退方案：使用时间戳和随机数组合
+        local chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        local result=''
+        for i in {1..8}; do
+            local pos=$(( (RANDOM * ${#chars}) / 32768 ))
+            result="${result}${chars:$pos:1}"
+        done
+        echo "$result"
+    fi
+}
+
 # 颜色定义
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -91,6 +112,22 @@ collect_user_input() {
     # Twitter URL
     read -p "Twitter URL (可选, 例: https://twitter.com/username): " TWITTER_URL
     
+    # 安全入口码
+    echo ""
+    log_info "安全入口码设置 (用于管理后台等安全功能)"
+    read -p "安全入口码 (8位字符串，留空自动生成): " SECURE_ENTRANCE
+    if [[ -z "$SECURE_ENTRANCE" ]]; then
+        SECURE_ENTRANCE=$(generate_random_string)
+        log_info "自动生成的安全入口码: $SECURE_ENTRANCE"
+    elif [[ ${#SECURE_ENTRANCE} -ne 8 ]]; then
+        log_warning "建议使用8位字符串，当前长度: ${#SECURE_ENTRANCE}"
+        read -p "是否使用自动生成的8位码? (y/N): " USE_AUTO
+        if [[ "$USE_AUTO" =~ ^[Yy]$ ]]; then
+            SECURE_ENTRANCE=$(generate_random_string)
+            log_info "自动生成的安全入口码: $SECURE_ENTRANCE"
+        fi
+    fi
+    
     # 数据目录
     read -p "博客数据存储目录 (默认: ./blog-data): " DATA_PATH
     if [[ -z "$DATA_PATH" ]]; then
@@ -109,6 +146,7 @@ collect_user_input() {
     echo "  GitHub URL: ${GITHUB_URL:-未设置}"
     echo "  Email: ${EMAIL:-未设置}"
     echo "  Twitter URL: ${TWITTER_URL:-未设置}"
+    echo "  安全入口码: $SECURE_ENTRANCE"
     echo "  数据目录: $DATA_PATH"
     echo "  服务端口: $BLOG_PORT"
     echo ""
@@ -287,8 +325,8 @@ wait_for_service() {
     done
 }
 
-# 更新配置文件中的博客标题
-update_blog_title() {
+# 更新配置文件
+update_blog_config() {
     log_info "更新博客配置..."
     
     local config_file="$DATA_PATH/config/site.config.json"
@@ -298,15 +336,21 @@ update_blog_title() {
         if command -v jq &> /dev/null; then
             # 创建临时文件
             local temp_file=$(mktemp)
-            jq --arg title "$BLOG_TITLE" '.title = $title' "$config_file" > "$temp_file"
+            jq --arg title "$BLOG_TITLE" \
+               --arg secureEntrance "$SECURE_ENTRANCE" \
+               '.title = $title | .secureEntrance = $secureEntrance' \
+               "$config_file" > "$temp_file"
             mv "$temp_file" "$config_file"
         else
-            # 使用 sed 替换 (简单方式，假设 title 在第一层)
+            # 使用 sed 替换 (简单方式，假设字段在第一层)
             sed -i.bak "s/\"title\":\s*\"[^\"]*\"/\"title\": \"$BLOG_TITLE\"/" "$config_file"
+            sed -i.bak "s/\"secureEntrance\":\s*\"[^\"]*\"/\"secureEntrance\": \"$SECURE_ENTRANCE\"/" "$config_file"
             rm -f "$config_file.bak"
         fi
         
-        log_success "博客标题已更新为: $BLOG_TITLE"
+        log_success "配置已更新:"
+        log_success "  博客标题: $BLOG_TITLE"
+        log_success "  安全入口码: $SECURE_ENTRANCE"
         
         # 触发配置重载
         if curl -f -s -X POST "http://localhost:$BLOG_PORT/api/config/reload" \
@@ -333,6 +377,10 @@ show_deployment_result() {
     echo "  • 数据目录: $DATA_PATH"
     echo "  • 容器名称: tiny-blog"
     echo ""
+    echo "🔐 安全信息:"
+    echo "  • 安全入口码: $SECURE_ENTRANCE"
+    echo "  • 重载密钥: $REVALIDATE_SECRET"
+    echo ""
     echo "🛠 常用命令:"
     echo "  • 查看状态: $COMPOSE_CMD ps"
     echo "  • 查看日志: $COMPOSE_CMD logs -f"
@@ -346,6 +394,7 @@ show_deployment_result() {
     echo "  • 配置文件: $DATA_PATH/config/site.config.json"
     echo ""
     echo "💡 提示: 编辑 Markdown 文件后，刷新浏览器即可看到更新!"
+    echo "🔑 请妥善保存安全入口码，它将用于管理后台等安全功能!"
     echo ""
 }
 
@@ -371,8 +420,8 @@ main() {
     # 等待服务启动
     wait_for_service
     
-    # 更新博客标题
-    update_blog_title
+    # 更新博客配置
+    update_blog_config
     
     # 显示结果
     show_deployment_result

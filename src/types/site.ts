@@ -19,6 +19,7 @@ export interface SiteConfig {
   nav: NavItem[];
   postsPerPage: number;
   excerptLength: number;
+  secureEntrance?: string;
 }
 
 export interface NavItem {

@@ -14,7 +14,7 @@ export function Header() {
   const [isClosing, setIsClosing] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
   
-  const { config, loading } = useConfig();
+  const { data: config, loading } = useConfig();
 
   const toggleMobileMenu = () => {
     if (isMobileMenuOpen) {

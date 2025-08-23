@@ -40,6 +40,12 @@ fix_permissions() {
     echo "✅ 权限修复完成"
 }
 
+# 生成随机八位字符串的函数
+generate_random_string() {
+    # 使用 /dev/urandom 和 tr 生成8位随机字符串
+    tr -dc 'A-Za-z0-9' </dev/urandom | head -c8 2>/dev/null || echo "$(date +%N | cut -c1-8)"
+}
+
 # 检查目录权限
 check_directory_permissions() {
     local dir=$1
@@ -255,6 +261,8 @@ init_config() {
                 cp /app/config.original/site.config.json /app/config/site.config.json
             else
                 echo "📄 创建默认JSON配置文件..."
+                # 生成随机的 secureEntrance 值
+                RANDOM_SECURE_ENTRANCE=$(generate_random_string)
                 safe_write_file "/app/config/site.config.json" '{
   "title": "Tiny Blog",
   "description": "😜Yes, I broke it. No, I didn'\''t mean to. Yes, I learned something.",
@@ -280,7 +288,8 @@ init_config() {
     { "name": "About", "href": "/about" }
   ],
   "postsPerPage": 6,
-  "excerptLength": 200
+  "excerptLength": 200,
+  "secureEntrance": "'$RANDOM_SECURE_ENTRANCE'"
 }'
             fi
             chown nextjs:nodejs /app/config/site.config.json
