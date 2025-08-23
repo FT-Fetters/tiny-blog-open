@@ -1,8 +1,12 @@
 ---
-title: "TypeScript 最佳实践指南"
-date: "2024-01-25"
-tags: ["TypeScript", "JavaScript", "编程技巧"]
-description: "分享在实际项目中使用 TypeScript 的最佳实践，提高代码质量和开发效率。"
+title: TypeScript 最佳实践指南
+date: '2024-01-25'
+tags:
+  - TypeScript
+  - JavaScript
+  - 编程技巧
+description: 分享在实际项目中使用 TypeScript 的最佳实践，提高代码质量和开发效率。
+published: true
 ---
 
 # TypeScript 最佳实践指南

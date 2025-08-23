@@ -11,17 +11,30 @@
   "social": {
     "github": "https://github.com/Tiny-Blog",
     "twitter": "https://twitter.com/username",
-    "email": "mailto:someone@gmail.com"
+    "email": "someone@gmail.com"
   },
   "theme": {
     "primaryColor": "#3b82f6"
   },
   "nav": [
-    { "name": "Home", "href": "/" },
-    { "name": "Posts", "href": "/posts" },
-    { "name": "Tags", "href": "/tags" },
-    { "name": "About", "href": "/about" }
+    {
+      "name": "Home",
+      "href": "/"
+    },
+    {
+      "name": "Posts",
+      "href": "/posts"
+    },
+    {
+      "name": "Tags",
+      "href": "/tags"
+    },
+    {
+      "name": "About",
+      "href": "/about"
+    }
   ],
   "postsPerPage": 6,
-  "excerptLength": 200
+  "excerptLength": 200,
+  "secureEntrance": "e1tLk2iS"
 }
