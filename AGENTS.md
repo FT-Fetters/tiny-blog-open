@@ -2,8 +2,10 @@
 
 ## Project Structure & Module Organization
 - Source: `src/` with `app/` (Next.js 14 App Router), `components/`, `hooks/`, `lib/`, and `types/`.
+  - Admin features: `src/app/admin/` (pages), `src/app/api/admin/` (API routes), admin-specific components.
 - Content: Markdown posts/pages in `content/posts/` and `content/pages/`; images in `content/images/`.
 - Config: `next.config.js`, `tailwind.config.ts`, `postcss.config.js`, TypeScript in `tsconfig.json`.
+- Site config: `config/site.config.json` with dynamic loading support.
 - Public assets: `public/`. Docs and scripts: `docs/`, `scripts/`. Docker support under `docker/`.
 
 ## Build, Test, and Development Commands
@@ -35,4 +37,20 @@
 - Do not commit secrets. Use environment variables via `.env.local` (ignored by Git).
 - Validate/limit user-provided paths in API routes (see `src/app/api/**`).
 - For Docker, prefer the provided `docker/` setup; verify `NEXT_PUBLIC_*` envs at build time.
+
+## Admin System Architecture
+- **Authentication**: JWT-based with secure entrance codes (8-char random strings).
+- **Access Control**: PC-only restriction via device detection (`useMobileDetection` hook).
+- **API Security**: All admin routes require JWT validation; role-based permissions (admin role).
+- **Components**: 
+  - `AdminLayout`, `ProtectedAdminPage`, `AdminLogin` for authentication flow.
+  - `MarkdownEditor`, `PostForm`, `ConfigManager` for content management.
+  - `MobileRestricted` for device access control.
+- **State Management**: `useAuth` hook manages JWT tokens with cookie persistence.
+
+## Development & Testing for Admin Features
+- Access admin panel: `/admin?key=YOUR_8_CHAR_CODE` (PC only).
+- Test auth flow: POST to `/api/admin/auth` with `{"secureEntrance": "CODE"}`.
+- Verify protected routes with Authorization header: `Bearer JWT_TOKEN`.
+- Security considerations: Never expose secure entrance codes; validate all admin API inputs.
 
