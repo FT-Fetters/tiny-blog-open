@@ -12,7 +12,7 @@ function PostsPageContent() {
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get('page')) || 1;
   
-  const { config } = useConfig();
+  const { data: config } = useConfig();
   const postsPerPage = config?.postsPerPage || 6;
   
   const { posts, pagination, loading, error } = usePosts({

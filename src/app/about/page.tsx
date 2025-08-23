@@ -5,7 +5,7 @@ import { usePage } from '@/hooks/usePage';
 import { LoadingTransition, SkeletonCard, StaggerContainer } from '@/components/LoadingComponents';
 
 export default function AboutPage() {
-  const { config, loading: configLoading } = useConfig();
+  const { data: config, loading: configLoading } = useConfig();
   const { page: aboutMePage, loading: aboutMeLoading, error: aboutMeError } = usePage('about-me');
   const { page: aboutBlogPage, loading: aboutBlogLoading, error: aboutBlogError } = usePage('about-blog');
 

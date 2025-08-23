@@ -11,9 +11,13 @@
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.16",
+    "@types/js-cookie": "^3.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "autoprefixer": "^10.4.21",
     "clsx": "^2.1.0",
     "gray-matter": "^4.0.3",
+    "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.400.0",
     "next": "^14.2.0",
     "prismjs": "^1.30.0",
