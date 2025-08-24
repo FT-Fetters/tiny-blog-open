@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { ThemeToggle } from './ThemeToggle';
 import { useConfig } from '@/hooks/useConfig';
 import { cn } from '@/lib/utils';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Rss } from 'lucide-react';
 import { useState } from 'react';
 
 export function Header() {
@@ -49,8 +49,9 @@ export function Header() {
       <header className="sticky top-0 z-50 w-full border-b border-neutral-200 bg-white/80 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-900/80">
         <div className="content-wrapper">
           <div className="flex h-20 items-center justify-between">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-2">
               <div className="h-6 w-32 shimmer rounded"></div>
+              <div className="h-4 w-4 shimmer rounded"></div>
             </div>
             
             <nav className="hidden md:flex items-center space-x-8">
@@ -75,10 +76,20 @@ export function Header() {
       <header className="sticky top-0 z-50 w-full border-b border-neutral-200 bg-white/80 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-900/80">
         <div className="content-wrapper">
           <div className="flex h-20 items-center justify-between fade-in">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-2">
               <Link href="/" className="text-xl font-medium text-neutral-900 dark:text-neutral-100 transition-smooth">
                 {config.title}
               </Link>
+              <a
+                href="/api/rss"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center p-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-500 dark:hover:text-neutral-100 transition-smooth"
+                aria-label="RSS订阅"
+                title="RSS订阅"
+              >
+                <Rss className="h-4 w-4" />
+              </a>
             </div>
             
             <nav className="hidden md:flex items-center space-x-8">
