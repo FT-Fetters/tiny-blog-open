@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Github, Mail, Twitter } from 'lucide-react';
+import { Github, Mail, Twitter, Rss } from 'lucide-react';
 import { siteConfig } from '@/lib/config';
 
 export function Footer() {
@@ -67,6 +67,16 @@ export function Footer() {
                     <Mail className="h-5 w-5" />
                   </a>
                 )}
+                <a
+                  href="/api/rss"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                  aria-label="RSS Feed"
+                  title="订阅RSS"
+                >
+                  <Rss className="h-5 w-5" />
+                </a>
               </div>
             </div>
           </div>
