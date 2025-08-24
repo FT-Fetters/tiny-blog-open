@@ -5,6 +5,7 @@ import { remark } from 'remark';
 import remarkHtml from 'remark-html';
 import { rehype } from 'rehype';
 import rehypePrismPlus from 'rehype-prism-plus';
+import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import { Post, PostMeta, PostFrontmatter } from '@/types';
 import { calculateReadingTime, generateExcerpt } from './utils';
@@ -128,8 +129,9 @@ export async function markdownToHtml(markdown: string): Promise<string> {
     .use(remarkHtml, { sanitize: false })
     .process(markdown);
     
-  // 然后使用 rehype 处理 HTML，添加代码高亮
+  // 然后使用 rehype 处理 HTML，添加代码高亮和标题锚点
   const rehypeResult = await rehype()
+    .use(rehypeSlug) // 为标题添加ID
     .use(rehypePrismPlus, {
       showLineNumbers: true,
       ignoreMissing: true,

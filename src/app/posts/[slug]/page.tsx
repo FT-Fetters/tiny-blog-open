@@ -6,8 +6,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Clock, ArrowLeft } from 'lucide-react';
 import { usePost } from '@/hooks/usePost';
+import { useTableOfContents } from '@/hooks/useTableOfContents';
 import { formatDate } from '@/lib/utils';
 import { TagList } from '@/components/TagList';
+import { TableOfContents } from '@/components/TableOfContents';
 import { useParams } from 'next/navigation';
 import { LoadingTransition } from '@/components/LoadingComponents';
 import { CodeBlock } from '@/components/CodeBlock';
@@ -17,6 +19,10 @@ export default function PostPage() {
   const slug = params.slug as string;
 
   const { post, htmlContent, loading, error } = usePost(slug, true);
+  const { headings, activeId, isVisible, scrollToHeading } = useTableOfContents({
+    htmlContent,
+    offsetTop: 100
+  });
 
   if (error) {
     return (
@@ -77,94 +83,126 @@ export default function PostPage() {
   );
 
   const actualContent = (
-    <article className="content-wrapper py-12">
-      {/* 返回按钮 */}
-      <div className="mb-8 fade-in">
-        <Link 
-          href="/posts" 
-          className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          返回文章列表
-        </Link>
-      </div>
-
-      {/* 文章头部 */}
-      <header className="mb-8 fade-in-up">
-        {post?.cover && (
-          <div className="relative w-full h-64 md:h-96 mb-8 rounded-lg overflow-hidden">
-            <Image
-              src={post.cover}
-              alt={post.title}
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
-        )}
-        
-        <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
-          {post?.title}
-        </h1>
-        
-        <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-6">
-          <div className="flex items-center space-x-1">
-            <Calendar className="h-4 w-4" />
-            <time dateTime={post?.date}>
-              {post?.date ? formatDate(post.date) : ''}
-            </time>
-          </div>
-          
-          {post?.readingTime && (
-            <div className="flex items-center space-x-1">
-              <Clock className="h-4 w-4" />
-              <span>{post.readingTime} 分钟阅读</span>
-            </div>
-          )}
-        </div>
-        
-        {post?.tags && post.tags.length > 0 && (
-          <div className="mb-8">
-            <TagList tags={post.tags} linkable showIcon />
-          </div>
-        )}
-        
-        {post?.description && (
-          <div className="text-lg text-muted-foreground mb-8 p-4 bg-muted rounded-lg">
-            {post.description}
-          </div>
-        )}
-      </header>
-
-      {/* 文章内容 */}
-      <div className="fade-in-delayed" style={{ animationDelay: '0.2s' }}>
-        {htmlContent && (
-          <div className="prose">
-            <CodeBlock html={htmlContent} />
-          </div>
-        )}
-      </div>
-
-      {/* 文章底部 */}
-      <footer className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 fade-in-delayed" style={{ animationDelay: '0.4s' }}>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              如果你觉得这篇文章有用，欢迎分享给更多人。
-            </p>
-          </div>
-          
-          <div className="flex items-center space-x-4">
+    <div className="relative max-w-screen-xl mx-auto px-6 sm:px-8 lg:px-12">
+      <div className="lg:grid lg:grid-cols-[1fr,260px] lg:gap-12 xl:gap-16">
+        <article className="py-12 min-w-0">
+          {/* 返回按钮 */}
+          <div className="mb-8 fade-in">
             <Link 
               href="/posts" 
-              className="btn-secondary"
+              className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors"
             >
-              查看更多文章
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              返回文章列表
             </Link>
           </div>
+
+          {/* 文章头部 */}
+          <header className="mb-8 fade-in-up">
+            {post?.cover && (
+              <div className="relative w-full h-64 md:h-96 mb-8 rounded-lg overflow-hidden">
+                <Image
+                  src={post.cover}
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            )}
+            
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+              {post?.title}
+            </h1>
+            
+            <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-6">
+              <div className="flex items-center space-x-1">
+                <Calendar className="h-4 w-4" />
+                <time dateTime={post?.date}>
+                  {post?.date ? formatDate(post.date) : ''}
+                </time>
+              </div>
+              
+              {post?.readingTime && (
+                <div className="flex items-center space-x-1">
+                  <Clock className="h-4 w-4" />
+                  <span>{post.readingTime} 分钟阅读</span>
+                </div>
+              )}
+            </div>
+            
+            {post?.tags && post.tags.length > 0 && (
+              <div className="mb-8">
+                <TagList tags={post.tags} linkable showIcon />
+              </div>
+            )}
+            
+            {post?.description && (
+              <div className="text-lg text-muted-foreground mb-8 p-4 bg-muted rounded-lg">
+                {post.description}
+              </div>
+            )}
+          </header>
+
+          {/* 文章内容 */}
+          <div className="fade-in-delayed" style={{ animationDelay: '0.2s' }}>
+            {htmlContent && (
+              <div className="prose max-w-none">
+                <CodeBlock html={htmlContent} />
+              </div>
+            )}
+          </div>
+
+          {/* 文章底部 */}
+          <footer className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 fade-in-delayed" style={{ animationDelay: '0.4s' }}>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  如果你觉得这篇文章有用，欢迎分享给更多人。
+                </p>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <Link 
+                  href="/posts" 
+                  className="btn-secondary"
+                >
+                  查看更多文章
+                </Link>
+              </div>
+            </div>
+          </footer>
+        </article>
+
+        {/* 桌面端侧边栏目录 */}
+        {isVisible && (
+          <div className="hidden lg:block">
+            <div className="sticky top-24">
+              <TableOfContents
+                headings={headings}
+                activeId={activeId}
+                variant="sidebar"
+                onItemClick={scrollToHeading}
+                showProgress={true}
+                className="!relative !right-auto !top-auto !w-full"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 移动端浮动目录按钮 */}
+      {isVisible && (
+        <div className="lg:hidden">
+          <TableOfContents
+            headings={headings}
+            activeId={activeId}
+            variant="floating"
+            onItemClick={scrollToHeading}
+          />
         </div>
-      </footer>
-    </article>
+      )}
+    </div>
   );
 
   return (
