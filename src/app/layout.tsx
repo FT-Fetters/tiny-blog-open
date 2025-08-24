@@ -58,6 +58,13 @@ export async function generateMetadata(): Promise<Metadata> {
     verification: {
       // google: 'your-google-verification-code',
     },
+    alternates: {
+      types: {
+        'application/rss+xml': '/api/rss',
+        'application/atom+xml': '/api/rss?format=atom',
+        'application/feed+json': '/api/rss?format=json',
+      },
+    },
   };
 }
 
